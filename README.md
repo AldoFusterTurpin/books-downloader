@@ -6,7 +6,7 @@ Python program that allows you to download with ease books from the Spring webpa
 - [Pyhton interpreter](https://www.python.org/downloads/)
 - [Selenium Python library](https://selenium-python.readthedocs.io)
 - [Requests Pyhton library](https://requests.readthedocs.io/en/master/)
-- [Google Chrome Driver for Selenium] according to your Google Chrome version<br>
+- [Google Chrome Driver](https://chromedriver.chromium.org/downloads) according to your Google Chrome version<br>
 
 Note: Python dependencies are defined in requirements.txt and everything is explained below.
 
@@ -24,7 +24,7 @@ Mehtod 1 -> Manual download<br> (boring)
 Mehtod 2 -> Semmi-automatic download (Recommended jeje)
 
 
-METHOD 1:<br>
+## METHOD 1<br>
 If you want to download some books, you go to their webpage and click on every book you are interested in and follow a manual download approach.
 This involves the following steps:
 1.) go to <br>
@@ -50,7 +50,7 @@ If your are downloading few books, this is not much effort but if you are found 
 That's why I created this Python program that allows you to download the books saving you a lot of time. The set up process is easier than it seems.
 What you have to do is follow the Mehtod 2:
 
-METHOD 2:<br>
+## METHOD 2<br>
 You can follow the instructions below. I also created this video to help you. I encorauge you to watch the video.
 TODO add link to youtube video.
 
