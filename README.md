@@ -1,12 +1,13 @@
 # books-downloader
 Python program that allows you to download with ease books from the Spring webpage.
 
-##Requirements:<br>
+## Requirements:<br>
 - This folder
-- Pyhton interpreter (https://www.python.org/downloads/)
-- Selenium Python library
-- Requests Pyhton library
-- Google Chrome Driver for Selenium according to your Google Chrome version<br>
+- [Pyhton interpreter](https://www.python.org/downloads/)
+- [Selenium Python library](https://selenium-python.readthedocs.io)
+- [Requests Pyhton library](https://requests.readthedocs.io/en/master/)
+- [Google Chrome Driver for Selenium] according to your Google Chrome version<br>
+
 Note: Python dependencies are defined in requirements.txt and everything is explained below.
 
 
@@ -26,20 +27,20 @@ Mehtod 2 -> Semmi-automatic download (Recommended jeje)
 METHOD 1:<br>
 If you want to download some books, you go to their webpage and click on every book you are interested in and follow a manual download approach.
 This involves the following steps:
-1) go to <br>
+1.) go to <br>
 https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst
 
 <img src="images/image_1.jpg" width="700">
 
 2) For every book you are interested in, do the following (example with a random book):<br>
-    2.1) Click in the link of the book (in my example click in "Quick Start Guide to VHDL")
+ 2.1) Click in the link of the book (in my example click in "Quick Start Guide to VHDL")
     
-    2.2) The Book details page will appear
+ 2.2) The Book details page will appear
 <img src="images/image_2.jpg" width="900">
     
-    2.3) Click the "Download book PDF" blue botton
+ 2.3) Click the "Download book PDF" blue botton
 
-    2.4) New tab with the Book in pdf will appear. Now you can download the file.
+ 2.4) New tab with the Book in pdf will appear. Now you can download the file.
 <img src="images/image_3.jpg" width="700">
 
 
@@ -58,18 +59,17 @@ TODO add link to youtube video.
 2.2) Go to https://sites.google.com/a/chromium.org/chromedriver/downloads
     and download the driver depending on your Google Chrome Version (to know your version, open Google Chrome and go to Chrome -> About Google Chrome or similar).
     
-    Save the corresponding zip into this folder. Extract the file and rename the extracted file to "chromedriver" (if it has a different name). Now you can delete the .zip file
-
-2.3) Open a Terminal and navigate to this folder
+    Save the corresponding zip into this folder. Extract the file and rename the extracted file to "chromedriver" (if it has a different name). Now you can delete the .zip file.
     
-2.4) Create a new virtual environment and install dependencies
-
+2.3) Open a Terminal and navigate to this folder.
+    
+2.4) Create a new virtual environment and install dependencies:
+    
+```
     python3 -m venv env
-
     source env/bin/activate
-
     pip install requirements.txt 
-
+```
 
 2.3) Go to the Spring page:
     https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst
@@ -90,7 +90,9 @@ TODO add link to youtube video.
 
 2.7) Go to the terminal (you will need to be in this folder) and execute
 
-    python3 download_Spring_books.py
+```
+python3 download_Spring_books.py
+```
 
 2.8)    Enjoy your books 👓
 
