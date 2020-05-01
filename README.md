@@ -22,7 +22,9 @@ This involves the following steps:
 1) go to 
 
 https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst
-    TODO add photo
+
+    <img src="images/image_1.jpg" >
+    ![](images/image_1.jpg)
 
 2) For every book you are interested in, do the following (example with a random book):
     
