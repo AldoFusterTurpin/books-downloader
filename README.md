@@ -66,7 +66,7 @@ TODO add link to youtube video.
 2.4) For every book that you find interesting, right click on the book name and select "Copy link address"
     TODO add photo
 
-2.5) Open the file "input.txt" (or create it with the exact same name if it doesn't exist) and paste the copied link in a new line
+2.5) Open the file "input.txt" (or create it in this folder with the exact same name if it doesn't exist) and paste the copied link in a new line
     TODO add photo
 
 2.6) Repeat steps 2.4 and 2.5 for all the books you want to Download (remember to Paste each new link in a new line of the "input.txt" file).
