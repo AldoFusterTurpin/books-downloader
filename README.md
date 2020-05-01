@@ -40,7 +40,7 @@ https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textboo
     
  2.3) Click the "Download book PDF" blue botton
 
- 2.4) New tab with the Book in pdf will appear. Now you can download the file.
+ 2.4) A new tab with the Book in pdf format will appear. Now you can download the file.
 <img src="images/image_3.jpg" width="700">
 
 
