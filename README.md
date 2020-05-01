@@ -2,24 +2,30 @@
 Python program that allows you to download with ease books from the Spring webpage.
 
 Hi 😃,
-the "Spring" allows you to download > 500 books in PDF format from it official web page.
+"Spring" publisher allows you to download > 500 books in PDF format from its official web page.
 
 This is the Webpage:
+
 https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst
 
 You can download files using thwo different approaches:
+
 Mehtod 1 -> Manual download
-Mehtod 2 -> Semmi-automatic download (Recomended jeje)
+
+Mehtod 2 -> Semmi-automatic download (Recommended jeje)
 
 
 METHOD 1
 
 If you want to download some books, you go to their webpage and click on every book you are interested in and follow a manual download approach.
 This involves the following steps:
-1) go to https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst
+1) go to 
+
+https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst
     TODO add photo
 
 2) For every book you are interested in, do the following (example with a random book):
+    
     2.1) Click in the link of the book (in my example click in "Quick Start Guide to VHDL")
         TODO add photo
     
@@ -39,6 +45,7 @@ That's why I created this Python program that allows you to download the books s
 What you have to do is follow the Mehtod 2:
 
 METHOD 2
+
 You can follow the instructions below. I also created this video to help you. I encorauge you to watch the video.
 TODO add link to youtube video.
 
@@ -70,11 +77,12 @@ TODO add link to youtube video.
     TODO add photo
 
 2.6) Repeat steps 2.4 and 2.5 for all the books you want to Download (remember to Paste each new link in a new line of the "input.txt" file).
-    Save the file
+    Save the "input.txt" file
 
 2.7) Go to the terminal (you will need to be in this folder) and execute
+
     python3 download_Spring_books.py
 
-    Enjoy your books 👀
+2.8)    Enjoy your books 👓
 
 Cheers!
