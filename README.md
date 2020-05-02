@@ -6,7 +6,7 @@ Python program that allows you to download with ease books from the Spring webpa
 - [Pyhton interpreter](https://www.python.org/downloads/)
 - [Selenium Python library](https://selenium-python.readthedocs.io)
 - [Requests Pyhton library](https://requests.readthedocs.io/en/master/)
-- [Google Chrome Driver](https://chromedriver.chromium.org/downloads) according to your Google Chrome version<br>
+- [Google Chrome Driver](https://chromedriver.chromium.org/downloads) depending on your Google Chrome version<br>
 
 Note: Python dependencies are defined in requirements.txt and everything is explained below.
 
