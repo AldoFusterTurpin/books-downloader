@@ -1,5 +1,5 @@
 # books-downloader-Python
-Python program that allows you to download with ease books from the Spring webpage.
+Python program that allows you to download with ease books from the Springer webpage.
 
 ## Requirements:<br>
 - This folder
@@ -7,28 +7,26 @@ Python program that allows you to download with ease books from the Spring webpa
 - [Selenium Python library](https://selenium-python.readthedocs.io)
 - [Requests Pyhton library](https://requests.readthedocs.io/en/master/)
 - [Google Chrome Driver](https://chromedriver.chromium.org/downloads) depending on your Google Chrome version<br>
+- [Google Chrome](https://www.google.com/chrome/) installed in your PC
 
 Note: Python dependencies are defined in requirements.txt and everything is explained below.
 
 
 Hi 😃,
-"Spring" publisher allows you to download > 500 books in PDF format from its official web page for free.
+"Springer" publisher allows you to download > 500 books in PDF format from its official web page for free.
 
-This is the Webpage:
+This is the [webpage](https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst)
 
-https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst
+You can download files using two different approaches:
 
-You can download files using thwo different approaches:
-
-Mehtod 1 -> Manual download<br> (boring)
+Mehtod 1 -> Manual download
 Mehtod 2 -> Semmi-automatic download (Recommended jeje)
 
 
 ## METHOD 1<br>
 If you want to download some books, you go to their webpage and click on every book you are interested in and follow a manual download approach.
-This involves the following steps:
-1.) go to <br>
-https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst
+This involves the following steps:<br>
+1.) go to [Springer Webpage](https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst)
 
 <img src="images/image_1.jpg" width="700">
 
@@ -71,8 +69,7 @@ TODO add link to youtube video.
     pip install requirements.txt 
 ```
 
-2.3) Go to the Spring page:
-    https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst
+2.3) Go to [Springer webpage](https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst)
    
 <img src="images/image_1.jpg" width="700">
 
@@ -91,7 +88,7 @@ TODO add link to youtube video.
 2.7) Go to the terminal (you will need to be in this folder) and execute
 
 ```
-python3 download_Spring_books.py
+python3 download_Springer_books.py
 ```
 
 2.8)    Enjoy your books 👓
