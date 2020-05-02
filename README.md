@@ -1,4 +1,4 @@
-# books-downloader
+# books-downloader-Python
 Python program that allows you to download with ease books from the Spring webpage.
 
 ## Requirements:<br>
