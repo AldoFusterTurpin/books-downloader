@@ -14,6 +14,9 @@ import selenium
 from selenium import webdriver
 
 
+def list_all_books():
+    pass
+
 def download_book_from_url(driver, url_book_details_page):
     driver.get(url_book_details_page)
 
@@ -34,7 +37,11 @@ def download_book_from_url(driver, url_book_details_page):
             download_button_element = driver.find_element_by_xpath(download_button_xpath)
         except selenium.common.exceptions.NoSuchElementException as e:
             logging.error(f"{type(e)} raised in this url: {url_book_details_page} with the XPath: {download_button_xpath}")
-    
+            try :
+                download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a/span[2]"
+                download_button_element = driver.find_element_by_xpath(download_button_xpath)
+            except selenium.common.exceptions.NoSuchElementException as e:
+                logging.error(f"{type(e)} raised in this url: {url_book_details_page} with the XPath: {download_button_xpath}")
     download_url = download_button_element.get_attribute('href')
 
     current_folder = pathlib.Path().absolute()
@@ -48,13 +55,16 @@ def download_book_from_url(driver, url_book_details_page):
             f.close()
 
 
-def main(): 
+def create_destination_folder():
     current_folder = pathlib.Path().absolute()
     destination_folder = "DownloadedBooks"
     destination_path = current_folder / destination_folder
     if not os.path.exists(destination_path):
         os.mkdir(destination_path)
 
+
+def main(): 
+    create_destination_folder()
     driver = webdriver.Chrome('./chromedriver')
     file_name = "input.txt"
     unique_urls = set()
