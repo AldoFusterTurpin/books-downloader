@@ -49,8 +49,13 @@ That's why I created this Python program that allows you to download the books s
 What you have to do is follow the Mehtod 2.
 
 ## METHOD 2<br>
-Please follow the instructions below. I also created this video to help you. I encorauge you to watch it.
-TODO add link to youtube video.
+It has two phases:
+1 "Set-up" phase. You just need to do it once to "prepare" the program.
+2 "Book download" phase. You can do it as many times as you want to download more books.<br>
+The Phase 1 is a pre-requisit for the phase 2, so please do the phase 1 and then the phase 2.<br>
+
+
+#### 1 Set-up phase 
 
 1. Download this github folder.
 
@@ -69,28 +74,31 @@ TODO add link to youtube video.
     pip install requirements.txt 
 ```
 
-5. Go to [Springer webpage](https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst)
+#### 2 Book Download phase
+
+1. Go to [Springer webpage](https://link.springer.com/search/page/2?showAll=true&package=mat-covid19_textbooks&facet-content-type=%22Book%22&sortOrder=newestFirst)
    
 <img src="images/image_1.jpg" width="700">
 
 
-6. For every book that you find interesting, right click on the book name and select "Copy link address"
+2. Choose a book that you find interesting, right click on the book name and select "Copy link address"
 <img src="images/image_4.jpg" width="700">
 
 
-7. Open the file "input.txt" (or create it in this folder with the exact same name if it doesn't exist) and paste the copied link in a new line
+3. Open the file "input.txt" (or create it in this folder with the exact same name if it doesn't exist) and paste the copied link in a new line
 <img src="images/image_5.jpg" width="900">
 
 
-8. Repeat steps 6 and 7 for all the books you want to Download (remember to Paste each new link in a new line of the "input.txt" file).
+4. Repeat steps 2 and 3 for all the books you want to Download (remember to Paste each new link in a new line of the "input.txt" file).
     Save the "input.txt" file.
 
-2.9 Go to the terminal (you will need to be in this folder) and execute
+5. Go to the terminal (you will need to be in this folder) and execute
 
 ```
+source env/bin/activate
 python3 download_Springer_books.py
 ```
 
-10.    Enjoy your books 👓
+6.    Enjoy your books 👓
 
 Cheers!
