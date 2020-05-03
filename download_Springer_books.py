@@ -9,7 +9,9 @@
 import pathlib
 import os
 import requests
-from selenium import webdriver 
+import logging
+import selenium
+from selenium import webdriver
 
 
 def download_book_from_url(driver, url_book_details_page):
@@ -21,27 +23,37 @@ def download_book_from_url(driver, url_book_details_page):
     old = " "
     new = "_"
     book_title = book_title.replace(old, new)
-
-    download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
-    download_button_element = driver.find_element_by_xpath(download_button_xpath)
+    download_button_element = None
+    try :
+        download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
+        download_button_element = driver.find_element_by_xpath(download_button_xpath)
+    except selenium.common.exceptions.NoSuchElementException as e:
+        logging.error(f"{type(e)} raised in this url: {url_book_details_page} with the XPath: {download_button_xpath}")
+        try :
+            download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a"
+            download_button_element = driver.find_element_by_xpath(download_button_xpath)
+        except selenium.common.exceptions.NoSuchElementException as e:
+            logging.error(f"{type(e)} raised in this url: {url_book_details_page} with the XPath: {download_button_xpath}")
+    
     download_url = download_button_element.get_attribute('href')
 
-    the_book_pdf = requests.get(download_url)
+    current_folder = pathlib.Path().absolute()
+    destination_folder = "DownloadedBooks"
+    destination_path = current_folder / destination_folder
+    destination_name = book_title + ".pdf"
+    if not os.path.exists(destination_path / destination_name):
+        with open(destination_path / destination_name, 'wb') as f:
+            response = requests.get(download_url)
+            f.write(response.content)
+            f.close()
 
+
+def main(): 
     current_folder = pathlib.Path().absolute()
     destination_folder = "DownloadedBooks"
     destination_path = current_folder / destination_folder
     if not os.path.exists(destination_path):
         os.mkdir(destination_path)
-
-    destination_name = book_title + ".pdf"
-    if not os.path.exists(destination_path / destination_name):
-        with open(destination_path / destination_name, 'wb') as f:
-            f.write(the_book_pdf.content)
-            f.close()
-
-
-def main(): 
 
     driver = webdriver.Chrome('./chromedriver')
     file_name = "input.txt"
