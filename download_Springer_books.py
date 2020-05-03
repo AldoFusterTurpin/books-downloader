@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# download your chrome dirver acording to your Chrome version
+# download your chrome dirver acording to your Google Chrome version
 # https://chromedriver.storage.googleapis.com/index.html?path=81.0.4044.69/
 
 # springer books
@@ -36,14 +36,14 @@ def download_book_from_url(driver, url_book_details_page):
 
     destination_name = book_title + ".pdf"
     if not os.path.exists(destination_path / destination_name):
-        open(destination_path / destination_name, 'wb').write(the_book_pdf.content)
+        with open(destination_path / destination_name, 'wb') as f:
+            f.write(the_book_pdf.content)
+            f.close()
 
 
 def main(): 
 
-    driver = webdriver.Chrome('./chromedriver') # TODO delete options parameter 
-    download_book_from_url(driver, "https://link.springer.com/book/10.1007/978-3-319-58487-4")
-
+    driver = webdriver.Chrome('./chromedriver')
     file_name = "input.txt"
     unique_urls = set()
     with open(file_name) as f:
