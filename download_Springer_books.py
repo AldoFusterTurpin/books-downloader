@@ -12,6 +12,7 @@ import requests
 import logging
 import selenium
 from selenium import webdriver
+import time
 
 
 def create_destination_folder():
@@ -71,6 +72,7 @@ def simulate_download_of_books(driver, url):
     xpath_to_find = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
     right_arrow = try_to_get_element_by_xpath(driver, xpath_to_find, url)
     right_arrow.click()
+    time.sleep(3)
 
     for i in range(1, 11):
         logging.info(i)
