@@ -35,7 +35,7 @@ def try_to_get_element_by_xpath(driver, xpath_to_find, url):
         return None
 
 
-def simulate_download_of_book(driver, url_of_book_details_page):
+def simulate_download_of_book(driver, url_of_book_details_page, i):
     driver.get(url_of_book_details_page)
 
     title_xpath = "//*[@id='main-content']/article[1]/div/div/div[1]/div/div/div[1]/div[2]/h1"
@@ -53,23 +53,39 @@ def simulate_download_of_book(driver, url_of_book_details_page):
 
     response = requests.get(download_url)
     if response.status_code == 200:
-        logging.info(f"In Url {url_of_book_details_page}. The book {book_title} can be downloaded.")
+        logging.info(f"In Url {url_of_book_details_page}. The book number {i}: {book_title} can be downloaded.")
     else:
-        logging.error(f"Response of Get Request is {response.status_code} when performing GET over {download_url}. Url extracted from book details page with url: {url_of_book_details_page} of the book {book_title}")
+        logging.error(f"Response of Get Request is {response.status_code} when performing GET over {download_url}. Url extracted from the book number {i}, details page url: {url_of_book_details_page} of the book {book_title}")
 
 
 def simulate_download_of_books(driver, url):
     driver.get(url)
-    books_urls = set()
+    books_urls = []
 
     for i in range(1, 11):
         xpath_to_find = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
         my_element = try_to_get_element_by_xpath(driver, xpath_to_find, url)
         link_url = my_element.get_attribute('href')
-        books_urls.add(link_url)
-    
-    for url in books_urls:
-        simulate_download_of_book(driver, url)
+        books_urls.append(link_url)
+
+    xpath_to_find = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
+    right_arrow = try_to_get_element_by_xpath(driver, xpath_to_find, url)
+    right_arrow.click()
+
+    for i in range(1, 11):
+        logging.info(i)
+        xpath_to_find = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
+        logging.info(f"XPath to find: {xpath_to_find}")
+        my_element = try_to_get_element_by_xpath(driver, xpath_to_find, url)
+        link_url = my_element.get_attribute('href')
+        books_urls.append(link_url)
+
+    xpath_to_find = f"//*[@id='kb-nav--main']/div[3]/form/a[2]/img"
+    right_arrow = try_to_get_element_by_xpath(driver, xpath_to_find, url)
+    right_arrow.click()
+
+    for i, url in enumerate(books_urls):
+        simulate_download_of_book(driver, url, i)
 
 
 def download_book_from_url(driver, url_of_book_details_page):
