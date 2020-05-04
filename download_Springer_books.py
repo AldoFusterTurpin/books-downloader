@@ -129,14 +129,12 @@ def download_books_from_file_containing_urls(driver, file_name_that_contains_url
 def main():
     logging.basicConfig(level=logging.INFO)
 
-    # create_destination_folder()
-
+    create_destination_folder()
+    
     driver = webdriver.Chrome('./chromedriver')
+    download_books_from_file_containing_urls(driver, "input.txt")
 
-    # file_name_that_contains_urls = "input.txt"
-    # download_books_from_file_containing_urls(driver, file_name_that_contains_urls)
-
-    simulate_download_of_books(driver, "https://link.springer.com/search?facet-content-type=\"Book\"&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks")
+    # simulate_download_of_books(driver, "https://link.springer.com/search?facet-content-type=\"Book\"&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks")
     
     driver.close()
 
