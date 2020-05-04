@@ -49,8 +49,8 @@ That's why I created this Python program that allows you to download the books s
 What you have to do is follow the Mehtod 2.
 
 ## METHOD 2<br>
-It has two phases:
-1 "Set-up" phase. You just need to do it once to "prepare" the program.
+It has two phases:<br>
+1 "Set-up" phase. You just need to do it once to "prepare" the program.<br>
 2 "Book download" phase. You can do it as many times as you want to download more books.<br>
 The Phase 1 is a pre-requisit for the phase 2, so please do the phase 1 and then the phase 2.<br>
 
