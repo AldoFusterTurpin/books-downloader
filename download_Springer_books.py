@@ -14,34 +14,39 @@ import selenium
 from selenium import webdriver
 
 
+def try_to_get_element_by_xpath(driver, xpath_to_find, url_book_details_page):
+    my_element = None
+    try :
+        my_element = driver.find_element_by_xpath(xpath_to_find)
+    except selenium.common.exceptions.NoSuchElementException as e:
+        logging.warning(f"{type(e)} raised when looking for this XPath: {xpath_to_find}, in this url: {url_book_details_page}")
+    finally:
+        return my_element
+
+
 def download_book_from_url(driver, url_book_details_page):
     driver.get(url_book_details_page)
 
     title_xpath = "//*[@id='main-content']/article[1]/div/div/div[1]/div/div/div[1]/div[2]/h1"
     book_title_element = driver.find_element_by_xpath(title_xpath)
     book_title = book_title_element.get_attribute('innerHTML').replace(" ", "_")
+
     download_button_element = None
-    try :
-        download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
-        download_button_element = driver.find_element_by_xpath(download_button_xpath)
-    except selenium.common.exceptions.NoSuchElementException as e:
-        logging.warning(f"{type(e)} raised in this url: {url_book_details_page} with the XPath: {download_button_xpath}")
-        try :
-            download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a"
-            download_button_element = driver.find_element_by_xpath(download_button_xpath)
-        except selenium.common.exceptions.NoSuchElementException as e:
-            logging.warning(f"{type(e)} raised in this url: {url_book_details_page} with the XPath: {download_button_xpath}")
-            # try :
-            #     download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a/span[2]"
-            #     download_button_element = driver.find_element_by_xpath(download_button_xpath)
-            # except selenium.common.exceptions.NoSuchElementException as e:
-            #     logging.warning(f"{type(e)} raised in this url: {url_book_details_page} with the XPath: {download_button_xpath}")
+    xpath_to_find = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
+    download_button_element = try_to_get_element_by_xpath(driver, xpath_to_find, url_book_details_page)
+    if download_button_element is None:        
+        xpath_to_find = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a"
+        download_button_element = try_to_get_element_by_xpath(driver, xpath_to_find, url_book_details_page)
+    #     xpath_to_find = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a/span[2]"
+    #     download_button_element = driver.try_to_get_element_by_xpath(driver, xpath_to_find, url_book_details_page)
+    
     download_url = download_button_element.get_attribute('href')
 
     current_folder = pathlib.Path().absolute()
     destination_folder = "DownloadedBooks"
     destination_path = current_folder / destination_folder
     destination_name = book_title + ".pdf"
+
     if not os.path.exists(destination_path / destination_name):
         with open(destination_path / destination_name, 'wb') as f:
             response = requests.get(download_url)
