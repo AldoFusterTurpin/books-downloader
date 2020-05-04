@@ -12,7 +12,9 @@ import requests
 import logging
 import selenium
 from selenium import webdriver
-import time
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def create_destination_folder():
@@ -65,20 +67,17 @@ def simulate_download_of_books(driver, url):
 
     for i in range(1, 11):
         xpath_to_find = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
-        my_element = try_to_get_element_by_xpath(driver, xpath_to_find, url)
+        my_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath_to_find)))
         link_url = my_element.get_attribute('href')
         books_urls.append(link_url)
 
     xpath_to_find = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
     right_arrow = try_to_get_element_by_xpath(driver, xpath_to_find, url)
     right_arrow.click()
-    time.sleep(3)
 
     for i in range(1, 11):
-        logging.info(i)
         xpath_to_find = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
-        logging.info(f"XPath to find: {xpath_to_find}")
-        my_element = try_to_get_element_by_xpath(driver, xpath_to_find, url)
+        my_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath_to_find)))
         link_url = my_element.get_attribute('href')
         books_urls.append(link_url)
 
