@@ -31,9 +31,9 @@ def create_destination_folder():
 #   it will return None indicating that the element doesn't exist
 def try_to_get_element_by_xpath(driver, xpath_to_find, url):
     try :
-        my_element = driver.find_element_by_xpath(xpath_to_find)
+        my_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath_to_find)))
         return my_element
-    except selenium.common.exceptions.NoSuchElementException as e:
+    except selenium.common.exceptions.TimeoutException as e:
         logging.warning(f"{type(e)} raised when looking for this XPath: {xpath_to_find}, in this url: {url}")
         return None
 
