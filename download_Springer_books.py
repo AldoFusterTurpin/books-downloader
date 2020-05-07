@@ -56,20 +56,23 @@ def simulate_download_of_book(driver, url_of_book_details_page, i):
 
     response = requests.get(download_url)
     if response.status_code == 200:
-        logging.info(f"In Url {url_of_book_details_page}. The book number {i}: {book_title} can be downloaded.")
+        logging.info(f"In Url {url_of_book_details_page}. The book {i}: {book_title} can be downloaded.")
     else:
-        logging.error(f"Response of Get Request is {response.status_code} when performing GET over {download_url}. Url extracted from the book number {i}, details page url: {url_of_book_details_page} of the book {book_title}")
+        logging.error(f"Response of Get Request is {response.status_code} when performing GET over {download_url}. Url extracted from the book {i}, details page url: {url_of_book_details_page} of the book {book_title}")
 
 
 def simulate_download_of_books(driver, url):
+    counter = 0
     driver.get(url)
     books_urls = []
 
     for i in range(1, 11):
         xpath_to_find = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
-        my_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath_to_find)))
+        my_element = try_to_get_element_by_xpath(driver, xpath_to_find, url)
         link_url = my_element.get_attribute('href')
         books_urls.append(link_url)
+        logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
+        counter += 1
 
     xpath_to_find = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
     right_arrow = try_to_get_element_by_xpath(driver, xpath_to_find, url)
@@ -77,9 +80,11 @@ def simulate_download_of_books(driver, url):
 
     for i in range(1, 11):
         xpath_to_find = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
-        my_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath_to_find)))
+        my_element = try_to_get_element_by_xpath(driver, xpath_to_find, url)
         link_url = my_element.get_attribute('href')
         books_urls.append(link_url)
+        logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
+        counter += 1
 
     xpath_to_find = f"//*[@id='kb-nav--main']/div[3]/form/a[2]/img"
     right_arrow = try_to_get_element_by_xpath(driver, xpath_to_find, url)
@@ -129,12 +134,12 @@ def download_books_from_file_containing_urls(driver, file_name_that_contains_url
 def main():
     logging.basicConfig(level=logging.INFO)
 
-    create_destination_folder()
+    # create_destination_folder()
     
     driver = webdriver.Chrome('./chromedriver')
-    download_books_from_file_containing_urls(driver, "input.txt")
+    #download_books_from_file_containing_urls(driver, "input.txt")
 
-    # simulate_download_of_books(driver, "https://link.springer.com/search?facet-content-type=\"Book\"&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks")
+    simulate_download_of_books(driver, "https://link.springer.com/search?facet-content-type=\"Book\"&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks")
     
     driver.close()
 
