@@ -46,11 +46,11 @@ def simulate_download_of_book(driver, url_of_book_details_page, i):
     book_title = book_title_element.get_attribute('innerHTML').replace(" ", "_")
 
     download_button_element = None
-    xpath_to_find = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
-    download_button_element = try_to_get_element_by_xpath(driver, xpath_to_find, url_of_book_details_page)
+    download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
+    download_button_element = try_to_get_element_by_xpath(driver, download_button_xpath, url_of_book_details_page)
     if download_button_element is None:        
-        xpath_to_find = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a"
-        download_button_element = try_to_get_element_by_xpath(driver, xpath_to_find, url_of_book_details_page)
+        download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a"
+        download_button_element = try_to_get_element_by_xpath(driver, download_button_xpath, url_of_book_details_page)
     
     download_url = download_button_element.get_attribute('href')
 
@@ -67,28 +67,30 @@ def simulate_download_of_books(driver, url):
     books_urls = []
 
     for i in range(1, 11):
-        xpath_to_find = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
-        my_element = try_to_get_element_by_xpath(driver, xpath_to_find, url)
+        book_link_xpath = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
+        my_element = try_to_get_element_by_xpath(driver, book_link_xpath, url)
         link_url = my_element.get_attribute('href')
         books_urls.append(link_url)
         logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
         counter += 1
 
-    xpath_to_find = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
-    right_arrow = try_to_get_element_by_xpath(driver, xpath_to_find, url)
-    right_arrow.click()
+    right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
+    right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, url)
 
-    for i in range(1, 11):
-        xpath_to_find = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
-        my_element = try_to_get_element_by_xpath(driver, xpath_to_find, url)
-        link_url = my_element.get_attribute('href')
-        books_urls.append(link_url)
-        logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
-        counter += 1
+    exists = right_arrow != None
+    while exists:
+        right_arrow.click()
 
-    xpath_to_find = f"//*[@id='kb-nav--main']/div[3]/form/a[2]/img"
-    right_arrow = try_to_get_element_by_xpath(driver, xpath_to_find, url)
-    right_arrow.click()
+        for i in range(1, 11):
+            my_element = try_to_get_element_by_xpath(driver, book_link_xpath, url)
+            link_url = my_element.get_attribute('href')
+            books_urls.append(link_url)
+            logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
+            counter += 1
+
+        right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a[2]/img"
+        right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, url)
+        exists = right_arrow != None
 
     for i, url in enumerate(books_urls):
         simulate_download_of_book(driver, url, i)
