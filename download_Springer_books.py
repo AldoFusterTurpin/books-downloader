@@ -31,7 +31,7 @@ def create_destination_folder():
 #   it will return None indicating that the element doesn't exist
 def try_to_get_element_by_xpath(driver, xpath_to_find, url):
     try:
-        my_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath_to_find)))
+        my_element = WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, xpath_to_find)))
         return my_element
     except selenium.common.exceptions.TimeoutException as e:
         logging.warning(f"{type(e)} raised when looking for this XPath: {xpath_to_find}, in this url: {url}")
@@ -61,40 +61,40 @@ def simulate_download_of_book(driver, url_of_book_details_page, i):
             f"Response of Get Request is {response.status_code} when performing GET over {download_url}. Url extracted from the book {i}, details page url: {url_of_book_details_page} of the book {book_title}")
 
 
-def simulate_download_of_books(driver, url):
-    books_urls = get_all_books_urls_from_webpage(driver, url)
+def simulate_download_of_books(driver, main_webPage_url):
+    books_urls = get_all_books_urls_from_webPage(driver, main_webPage_url)
 
-    for i, url in enumerate(books_urls):
-        simulate_download_of_book(driver, url, i)
+    for i, main_webPage_url in enumerate(books_urls):
+        simulate_download_of_book(driver, main_webPage_url, i)
 
 
-def get_all_books_urls_from_webpage(driver, url):
+def get_all_books_urls_from_webPage(driver, main_webPage_url):
     counter = 0
-    driver.get(url)
+    driver.get(main_webPage_url)
     books_urls = []
     for i in range(1, 11):
         book_link_xpath = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
-        my_element = try_to_get_element_by_xpath(driver, book_link_xpath, url)
+        my_element = try_to_get_element_by_xpath(driver, book_link_xpath, main_webPage_url)
         link_url = my_element.get_attribute('href')
         books_urls.append(link_url)
         logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
         counter += 1
 
     right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
-    right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, url)
+    right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, main_webPage_url)
 
     while right_arrow is not None:
         right_arrow.click()
 
         for i in range(1, 11):
-            my_element = try_to_get_element_by_xpath(driver, book_link_xpath, url)
+            my_element = try_to_get_element_by_xpath(driver, book_link_xpath, main_webPage_url)
             link_url = my_element.get_attribute('href')
             books_urls.append(link_url)
             logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
             counter += 1
 
         right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a[2]/img"
-        right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, url)
+        right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, main_webPage_url)
 
     return books_urls
 
@@ -143,8 +143,8 @@ def main():
     driver = webdriver.Chrome('./chromedriver')
     # download_books_from_file_containing_urls(driver, "input.txt")
 
-    simulate_download_of_books(driver,
-                               "https://link.springer.com/search?facet-content-type=\"Book\"&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks")
+    main_webPage_url = "https://link.springer.com/search?facet-content-type=\"Book\"&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks"
+    simulate_download_of_books(driver, main_webPage_url)
 
     driver.close()
 
