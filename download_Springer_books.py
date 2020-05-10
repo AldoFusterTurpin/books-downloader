@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# download your chrome dirver acording to your Google Chrome version
+# download your chrome driver according to your Google Chrome version
 # https://chromedriver.storage.googleapis.com/index.html?path=81.0.4044.69/
 
 # springer books
@@ -30,7 +30,7 @@ def create_destination_folder():
 # else: 
 #   it will return None indicating that the element doesn't exist
 def try_to_get_element_by_xpath(driver, xpath_to_find, url):
-    try :
+    try:
         my_element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, xpath_to_find)))
         return my_element
     except selenium.common.exceptions.TimeoutException as e:
@@ -45,27 +45,33 @@ def simulate_download_of_book(driver, url_of_book_details_page, i):
     book_title_element = try_to_get_element_by_xpath(driver, title_xpath, url_of_book_details_page)
     book_title = book_title_element.get_attribute('innerHTML').replace(" ", "_")
 
-    download_button_element = None
     download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
     download_button_element = try_to_get_element_by_xpath(driver, download_button_xpath, url_of_book_details_page)
-    if download_button_element is None:        
+    if download_button_element is None:
         download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a"
         download_button_element = try_to_get_element_by_xpath(driver, download_button_xpath, url_of_book_details_page)
-    
+
     download_url = download_button_element.get_attribute('href')
 
     response = requests.get(download_url)
     if response.status_code == 200:
         logging.info(f"In Url {url_of_book_details_page}. The book {i}: {book_title} can be downloaded.")
     else:
-        logging.error(f"Response of Get Request is {response.status_code} when performing GET over {download_url}. Url extracted from the book {i}, details page url: {url_of_book_details_page} of the book {book_title}")
+        logging.error(
+            f"Response of Get Request is {response.status_code} when performing GET over {download_url}. Url extracted from the book {i}, details page url: {url_of_book_details_page} of the book {book_title}")
 
 
 def simulate_download_of_books(driver, url):
+    books_urls = get_all_books_urls_from_webpage(driver, url)
+
+    for i, url in enumerate(books_urls):
+        simulate_download_of_book(driver, url, i)
+
+
+def get_all_books_urls_from_webpage(driver, url):
     counter = 0
     driver.get(url)
     books_urls = []
-
     for i in range(1, 11):
         book_link_xpath = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
         my_element = try_to_get_element_by_xpath(driver, book_link_xpath, url)
@@ -77,8 +83,7 @@ def simulate_download_of_books(driver, url):
     right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
     right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, url)
 
-    exists = right_arrow != None
-    while exists:
+    while right_arrow is not None:
         right_arrow.click()
 
         for i in range(1, 11):
@@ -90,10 +95,8 @@ def simulate_download_of_books(driver, url):
 
         right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a[2]/img"
         right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, url)
-        exists = right_arrow != None
 
-    for i, url in enumerate(books_urls):
-        simulate_download_of_book(driver, url, i)
+    return books_urls
 
 
 def download_book_from_url(driver, url_of_book_details_page):
@@ -103,13 +106,12 @@ def download_book_from_url(driver, url_of_book_details_page):
     book_title_element = try_to_get_element_by_xpath(driver, title_xpath, url_of_book_details_page)
     book_title = book_title_element.get_attribute('innerHTML').replace(" ", "_")
 
-    download_button_element = None
     xpath_to_find = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
     download_button_element = try_to_get_element_by_xpath(driver, xpath_to_find, url_of_book_details_page)
-    if download_button_element is None:        
+    if download_button_element is None:
         xpath_to_find = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a"
         download_button_element = try_to_get_element_by_xpath(driver, xpath_to_find, url_of_book_details_page)
-    
+
     download_url = download_button_element.get_attribute('href')
 
     current_folder = pathlib.Path().absolute()
@@ -137,14 +139,15 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     # create_destination_folder()
-    
-    driver = webdriver.Chrome('./chromedriver')
-    #download_books_from_file_containing_urls(driver, "input.txt")
 
-    simulate_download_of_books(driver, "https://link.springer.com/search?facet-content-type=\"Book\"&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks")
-    
+    driver = webdriver.Chrome('./chromedriver')
+    # download_books_from_file_containing_urls(driver, "input.txt")
+
+    simulate_download_of_books(driver,
+                               "https://link.springer.com/search?facet-content-type=\"Book\"&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks")
+
     driver.close()
 
 
 if __name__ == "__main__":
-   main()
+    main()
