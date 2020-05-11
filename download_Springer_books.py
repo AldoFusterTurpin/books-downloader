@@ -3,8 +3,9 @@
 # download your chrome driver according to your Google Chrome version
 # https://chromedriver.storage.googleapis.com/index.html?path=81.0.4044.69/
 
-# springer books
+# Springer books
 # https://link.springer.com/search?facet-content-type=%22Book%22&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks
+
 
 import pathlib
 import os
@@ -38,21 +39,6 @@ def try_to_get_element_by_xpath(driver, xpath_to_find, url):
         return None
 
 
-def simulate_download_of_book(driver, url_of_book_details_page, i):
-    book_title, download_url = get_download_url_from_book_details_page(driver, url_of_book_details_page)
-
-    response = requests.get(download_url)
-    response_code = response.status_code
-
-    if response_code == 200:
-        logging.info(f"In Url {url_of_book_details_page}. The book {i}: {book_title} can be downloaded.")
-    else:
-        logging.error(
-            f"Response of Get Request is {response_code} when performing GET over {download_url}. Url extracted from the book {i}, details page url: {url_of_book_details_page} of the book {book_title}")
-
-    return response_code
-
-
 def get_download_url_from_book_details_page(driver, url_of_book_details_page):
     driver.get(url_of_book_details_page)
     title_xpath = "//*[@id='main-content']/article[1]/div/div/div[1]/div/div/div[1]/div[2]/h1"
@@ -68,34 +54,44 @@ def get_download_url_from_book_details_page(driver, url_of_book_details_page):
     return book_title, download_url
 
 
-def simulate_download_of_first_n_books(driver, main_webPage_url, n=200):
-    responses_to_return = []
+def simulate_download_of_book(driver, url_of_book_details_page, i):
+    book_title, download_url = get_download_url_from_book_details_page(driver, url_of_book_details_page)
 
-    books_urls = get_first_n_books_urls_from_webPage(driver, main_webPage_url, n)
+    response = requests.get(download_url)
+    response_code = response.status_code
 
-    counter = 0
-    for i, main_webPage_url in enumerate(books_urls):
-        response_code = simulate_download_of_book(driver, main_webPage_url, i)
-        responses_to_return.append(response_code)
+    if response_code == 200:
+        logging.info(f"In Url {url_of_book_details_page}. The book {i}: {book_title} can be downloaded.")
+    else:
+        logging.error(
+            f"Response of Get Request is {response_code} when performing GET over {download_url}. Url extracted from "
+            f"the book {i}, details page url: {url_of_book_details_page} of the book {book_title}")
+
+    return response_code
+
+
+def tmp(driver, book_link_xpath, main_webPage_url, books_urls, counter, max_elements):
+    i = 0
+    while i < 11 and i <= max_elements:
+        my_element = try_to_get_element_by_xpath(driver, book_link_xpath, main_webPage_url)
+        link_url = my_element.get_attribute('href')
+
+        books_urls.append(link_url)
+
+        logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
+
         counter += 1
-        if counter >= n:
-            return responses_to_return
-    return responses_to_return
 
 
 def get_first_n_books_urls_from_webPage(driver, main_webPage_url, n=200):
     counter = 0
     driver.get(main_webPage_url)
     books_urls = []
-    for i in range(1, 11):
-        book_link_xpath = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
-        my_element = try_to_get_element_by_xpath(driver, book_link_xpath, main_webPage_url)
-        link_url = my_element.get_attribute('href')
-        books_urls.append(link_url)
-        logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
-        counter += 1
-        if counter >= n:
-            return books_urls
+    book_link_xpath = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
+    tmp(driver, book_link_xpath, main_webPage_url, books_urls, counter, n)
+
+    if counter >= n:
+        return books_urls
 
     right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
     right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, main_webPage_url)
@@ -103,19 +99,27 @@ def get_first_n_books_urls_from_webPage(driver, main_webPage_url, n=200):
     while right_arrow is not None:
         right_arrow.click()
 
-        for i in range(1, 11):
-            my_element = try_to_get_element_by_xpath(driver, book_link_xpath, main_webPage_url)
-            link_url = my_element.get_attribute('href')
-            books_urls.append(link_url)
-            logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
-            counter += 1
-            if counter >= n:
-                return books_urls
+        tmp(driver, book_link_xpath, main_webPage_url, books_urls, counter, n)
 
         right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a[2]/img"
         right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, main_webPage_url)
 
     return books_urls
+
+
+def simulate_download_of_first_n_books(driver, main_webPage_url, n=10):
+    get_responses = []
+
+    books_urls = get_first_n_books_urls_from_webPage(driver, main_webPage_url, n)
+
+    counter = 0
+    for i, main_webPage_url in enumerate(books_urls):
+        response_code = simulate_download_of_book(driver, main_webPage_url, i)
+        get_responses.append(response_code)
+        counter += 1
+        if counter >= n:
+            return get_responses
+    return get_responses
 
 
 def download_book_from_url(driver, url_of_book_details_page):
