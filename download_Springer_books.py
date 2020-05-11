@@ -70,27 +70,29 @@ def simulate_download_of_book(driver, url_of_book_details_page, i):
     return response_code
 
 
-def tmp(driver, book_link_xpath, main_webPage_url, books_urls, counter, max_elements):
-    i = 0
-    while i < 11 and i <= max_elements:
+def add_books_urls(driver, main_webPage_url, books_urls, counter, max_elements):
+    i = 1
+    book_link_xpath = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
+    while i < 11 and counter < max_elements:
         my_element = try_to_get_element_by_xpath(driver, book_link_xpath, main_webPage_url)
         link_url = my_element.get_attribute('href')
 
         books_urls.append(link_url)
 
         logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
-
+        i += 1
         counter += 1
+    return counter
 
 
-def get_first_n_books_urls_from_webPage(driver, main_webPage_url, n=200):
-    counter = 0
+def get_first_n_books_urls_from_webPage(driver, main_webPage_url, max_elements=200):
     driver.get(main_webPage_url)
-    books_urls = []
-    book_link_xpath = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
-    tmp(driver, book_link_xpath, main_webPage_url, books_urls, counter, n)
 
-    if counter >= n:
+    counter = 0
+    books_urls = []
+    counter = add_books_urls(driver, main_webPage_url, books_urls, counter, max_elements)
+
+    if counter >= max_elements:
         return books_urls
 
     right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
@@ -99,7 +101,7 @@ def get_first_n_books_urls_from_webPage(driver, main_webPage_url, n=200):
     while right_arrow is not None:
         right_arrow.click()
 
-        tmp(driver, book_link_xpath, main_webPage_url, books_urls, counter, n)
+        counter = add_books_urls(driver, main_webPage_url, books_urls, counter, max_elements)
 
         right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a[2]/img"
         right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, main_webPage_url)
@@ -107,17 +109,17 @@ def get_first_n_books_urls_from_webPage(driver, main_webPage_url, n=200):
     return books_urls
 
 
-def simulate_download_of_first_n_books(driver, main_webPage_url, n=10):
+def simulate_download_of_first_n_books(driver, main_webPage_url, max_elements=10):
     get_responses = []
 
-    books_urls = get_first_n_books_urls_from_webPage(driver, main_webPage_url, n)
+    books_urls = get_first_n_books_urls_from_webPage(driver, main_webPage_url, max_elements)
 
     counter = 0
     for i, main_webPage_url in enumerate(books_urls):
         response_code = simulate_download_of_book(driver, main_webPage_url, i)
         get_responses.append(response_code)
         counter += 1
-        if counter >= n:
+        if counter >= max_elements:
             return get_responses
     return get_responses
 
