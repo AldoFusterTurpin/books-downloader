@@ -54,21 +54,33 @@ def simulate_download_of_book(driver, url_of_book_details_page, i):
     download_url = download_button_element.get_attribute('href')
 
     response = requests.get(download_url)
-    if response.status_code == 200:
+    response_code = response.status_code
+
+    if response_code == 200:
         logging.info(f"In Url {url_of_book_details_page}. The book {i}: {book_title} can be downloaded.")
     else:
         logging.error(
-            f"Response of Get Request is {response.status_code} when performing GET over {download_url}. Url extracted from the book {i}, details page url: {url_of_book_details_page} of the book {book_title}")
+            f"Response of Get Request is {response_code} when performing GET over {download_url}. Url extracted from the book {i}, details page url: {url_of_book_details_page} of the book {book_title}")
+
+    return response_code
 
 
-def simulate_download_of_books(driver, main_webPage_url):
-    books_urls = get_all_books_urls_from_webPage(driver, main_webPage_url)
+def simulate_download_of_first_n_books(driver, main_webPage_url, n=200):
+    responses_to_return = []
 
+    books_urls = get_first_n_books_urls_from_webPage(driver, main_webPage_url, n)
+
+    counter = 0
     for i, main_webPage_url in enumerate(books_urls):
-        simulate_download_of_book(driver, main_webPage_url, i)
+        response_code = simulate_download_of_book(driver, main_webPage_url, i)
+        responses_to_return.append(response_code)
+        counter += 1
+        if counter >= n:
+            return responses_to_return
+    return responses_to_return
 
 
-def get_all_books_urls_from_webPage(driver, main_webPage_url):
+def get_first_n_books_urls_from_webPage(driver, main_webPage_url, n=200):
     counter = 0
     driver.get(main_webPage_url)
     books_urls = []
@@ -79,6 +91,8 @@ def get_all_books_urls_from_webPage(driver, main_webPage_url):
         books_urls.append(link_url)
         logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
         counter += 1
+        if counter >= n:
+            return books_urls
 
     right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a/img"
     right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, main_webPage_url)
@@ -92,6 +106,8 @@ def get_all_books_urls_from_webPage(driver, main_webPage_url):
             books_urls.append(link_url)
             logging.info(f"Book {counter} with url {link_url} appended to list of urls to simulate download")
             counter += 1
+            if counter >= n:
+                return books_urls
 
         right_arrow_xpath = f"//*[@id='kb-nav--main']/div[3]/form/a[2]/img"
         right_arrow = try_to_get_element_by_xpath(driver, right_arrow_xpath, main_webPage_url)
@@ -138,13 +154,10 @@ def download_books_from_file_containing_urls(driver, file_name_that_contains_url
 def main():
     logging.basicConfig(level=logging.INFO)
 
-    # create_destination_folder()
+    create_destination_folder()
 
     driver = webdriver.Chrome('./chromedriver')
-    # download_books_from_file_containing_urls(driver, "input.txt")
-
-    main_webPage_url = "https://link.springer.com/search?facet-content-type=\"Book\"&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks"
-    simulate_download_of_books(driver, main_webPage_url)
+    download_books_from_file_containing_urls(driver, "input.txt")
 
     driver.close()
 
