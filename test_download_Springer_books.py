@@ -23,7 +23,6 @@ class DownloadBooksTestSuite(unittest.TestCase):
         for response in responses:
             self.assertEqual(response, expected_response)
 
-
     def test_simulate_download_of_first_10_books(self):
         driver = webdriver.Chrome('./chromedriver')
         main_webPage_url = "https://link.springer.com/search?facet-content-type=\"Book\"&sortOrder=newestFirst&showAll=true&package=mat-covid19_textbooks"
