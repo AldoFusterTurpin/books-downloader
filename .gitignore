@@ -2,3 +2,5 @@
 chromedriver
 env/
 DownloadedBooks
+.idea/
+.vscode/
