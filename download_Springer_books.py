@@ -39,19 +39,7 @@ def try_to_get_element_by_xpath(driver, xpath_to_find, url):
 
 
 def simulate_download_of_book(driver, url_of_book_details_page, i):
-    driver.get(url_of_book_details_page)
-
-    title_xpath = "//*[@id='main-content']/article[1]/div/div/div[1]/div/div/div[1]/div[2]/h1"
-    book_title_element = try_to_get_element_by_xpath(driver, title_xpath, url_of_book_details_page)
-    book_title = book_title_element.get_attribute('innerHTML').replace(" ", "_")
-
-    download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
-    download_button_element = try_to_get_element_by_xpath(driver, download_button_xpath, url_of_book_details_page)
-    if download_button_element is None:
-        download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a"
-        download_button_element = try_to_get_element_by_xpath(driver, download_button_xpath, url_of_book_details_page)
-
-    download_url = download_button_element.get_attribute('href')
+    book_title, download_url = get_download_url_from_book_details_page(driver, url_of_book_details_page)
 
     response = requests.get(download_url)
     response_code = response.status_code
@@ -63,6 +51,21 @@ def simulate_download_of_book(driver, url_of_book_details_page, i):
             f"Response of Get Request is {response_code} when performing GET over {download_url}. Url extracted from the book {i}, details page url: {url_of_book_details_page} of the book {book_title}")
 
     return response_code
+
+
+def get_download_url_from_book_details_page(driver, url_of_book_details_page):
+    driver.get(url_of_book_details_page)
+    title_xpath = "//*[@id='main-content']/article[1]/div/div/div[1]/div/div/div[1]/div[2]/h1"
+    book_title_element = try_to_get_element_by_xpath(driver, title_xpath, url_of_book_details_page)
+    book_title = book_title_element.get_attribute('innerHTML').replace(" ", "_")
+
+    download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
+    download_button_element = try_to_get_element_by_xpath(driver, download_button_xpath, url_of_book_details_page)
+    if download_button_element is None:
+        download_button_xpath = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a"
+        download_button_element = try_to_get_element_by_xpath(driver, download_button_xpath, url_of_book_details_page)
+    download_url = download_button_element.get_attribute('href')
+    return book_title, download_url
 
 
 def simulate_download_of_first_n_books(driver, main_webPage_url, n=200):
@@ -116,19 +119,7 @@ def get_first_n_books_urls_from_webPage(driver, main_webPage_url, n=200):
 
 
 def download_book_from_url(driver, url_of_book_details_page):
-    driver.get(url_of_book_details_page)
-
-    title_xpath = "//*[@id='main-content']/article[1]/div/div/div[1]/div/div/div[1]/div[2]/h1"
-    book_title_element = try_to_get_element_by_xpath(driver, title_xpath, url_of_book_details_page)
-    book_title = book_title_element.get_attribute('innerHTML').replace(" ", "_")
-
-    xpath_to_find = "//*[@id='main-content']/article[1]/div/div/div[2]/div[1]/a"
-    download_button_element = try_to_get_element_by_xpath(driver, xpath_to_find, url_of_book_details_page)
-    if download_button_element is None:
-        xpath_to_find = "//*[@id='main-content']/article[1]/div/div/div[2]/div/div/a"
-        download_button_element = try_to_get_element_by_xpath(driver, xpath_to_find, url_of_book_details_page)
-
-    download_url = download_button_element.get_attribute('href')
+    book_title, download_url = get_download_url_from_book_details_page(driver, url_of_book_details_page)
 
     current_folder = pathlib.Path().absolute()
     destination_folder = "DownloadedBooks"
