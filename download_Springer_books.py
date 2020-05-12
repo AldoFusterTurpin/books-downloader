@@ -72,8 +72,8 @@ def simulate_download_of_book(driver, url_of_book_details_page, i):
 
 def add_books_urls(driver, main_webPage_url, books_urls, counter, max_elements):
     i = 1
-    book_link_xpath = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
     while i < 11 and counter < max_elements:
+        book_link_xpath = f"//*[@id='results-list']/li[{i}]/div[2]/h2/a"
         my_element = try_to_get_element_by_xpath(driver, book_link_xpath, main_webPage_url)
         link_url = my_element.get_attribute('href')
 
