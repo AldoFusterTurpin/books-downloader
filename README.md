@@ -71,7 +71,7 @@ The Phase 1 is a pre-requisit for the phase 2, so please do the phase 1 and then
 ```
     python3 -m venv env
     source env/bin/activate
-    pip install requirements.txt 
+    pip3 install -r requirements.txt 
 ```
 
 #### 2 Book Download phase
